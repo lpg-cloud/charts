@@ -21,10 +21,13 @@
                     <option value="表格">表格</option>
                 </select>
             </div>
-            <div class="form-group" id="nameGroup">
+            <div id="chartName">
+
+            </div>
+            @* <div class="form-group" id="nameGroup">
                 <label for="chartName">图形名称:</label>
                 <input name="chartName" id="chartName" class="form-control" required>
-            </div> 
+            </div>  *@
             <div class="form-group">
                 <label>数字类型：</label>
                 <div id="integer">
@@ -41,23 +44,20 @@
             <button type="button" onclick="downloadJSON(result,'样例数据')" class="btn btn-default" >下载</button>
         </form>
     </div>
-    <div class="col-md-8">
-        
-            <p id="result" class="bg-info"></p>
-        
-        <div id="main" style="width: 100%;height:400px;"></div>
+    <div class="col-md-4 bg-info" style="height: 550px;overflow: auto;">
+        <label>当前数据:</label>
+        <p id="currentRes"></p>
+    </div>
+    <div class="col-md-4 bg-success" style="height: 550px;overflow: auto;">
+        <label>总数据:</label>
+        <p id="result"></p>
     </div>
 </div>
 
 @section Scripts {
-    <script src="~/Scripts/echarts.js"></script>
     <script src="~/Scripts/dataDic.js"></script>
     <script>
-    // 基于准备好的dom，初始化echarts实例
-        //var myChart = echarts.init(document.getElementById('main'));
-        //let bar=new barData(myChart);
-       // bar.drawChart();
-       let nameGroup=$("<div class="form-group" id="nameGroup"><label for="chartName">图形名称:</label><input name="chartName" id="chartName" class="form-control" required></div> ");
+       let nameGroup=$('<div class="form-group" id="nameGroup"><label for="chartName">图形名称:</label><input name="chartName" id="chartName" class="form-control" required></div> ');
        
 
         $('#tableName').on('change', function (e) {
@@ -85,7 +85,9 @@
                 let txtLen= $('[name=txtField]:checked').length;
                 let numLen= $('[name=numField]:checked').length;
                 if(txtLen>1|numLen>1){
-
+                    $('#chartName').append(nameGroup);
+                }else{
+                     nameGroup.remove();
                 }
             })
         })
@@ -119,36 +121,37 @@
             
             chartData.tableName=datas.tableName;
             chartData.chartType=["","",""];
-            if(typeof(datas.numField) != 'string'){
-                datas.numField.forEach(function(numField){
-                     chartData.fields.push({name:numField,type:'n'});
-                })
-                if(datas.txtField){
-                    chartData.fields.push({name:datas.txtField,type:'t'});
-                }
-            }else{
+
+            //添加数字类型的字段
+            try{
                 chartData.fields.push({name:dataDic[datas.numField].name,fieldName:datas.numField,type:'n'});
-                chartData.fields.push({name:dataDic[datas.txtField].name,fieldName:datas.txtField,type:'t'});
-                chartData.fields.push({name:"年份",type:'t',fieldName:"year"});
+            }catch{
+                if(datas.numField){
+                    datas.numField.forEach(function(numField){
+                        chartData.fields.push({name:dataDic[datas.numField].name,fieldName:numField,type:'n'});
+                    })
+                }
             }
 
+            //添加文本类型的字段
+            try{
+                chartData.fields.push({name:dataDic[datas.txtField].name,fieldName:datas.txtField,type:'t'});
+            }catch{
+                if(datas.txtField){
+                    datas.txtField.forEach(function(txtField){
+                        chartData.fields.push({name:dataDic[datas.txtField].name,fieldName:txtField,type:'t'});
+                    })
+                }
+            }
+            
+            chartData.fields.push({name:"年份",type:'t',fieldName:"year"}); 
             result.push({rowData:datas,data:chartData});
+            formatJson(chartData).then(str=>$('#currentRes').html(str));
             
             formatJson(result.map(data => data.data)).then((string) => {
                 $('#result').html(string);
             });
             
-
-            //$.ajax({
-            //    url:"/Home/Data",
-            //    type:"post",
-            //    data:datas,
-            //    success:(res)=>{
-            //        console.log(JSON.parse(res).data);
-            //         //let bar=new barData(myChart,JSON.parse(res));
-            //        //bar.drawChart(); 
-            //    }
-            //});
             return false;
         });
 

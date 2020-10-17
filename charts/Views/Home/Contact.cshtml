@@ -14,8 +14,8 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-4">
-        <div id="chartContent" width="100%"></div>
+    <div class="col-md-10 center-block">
+        <div id="chartContent" style="height: 500px; width:100%;"></div>
     </div>
 </div>
 @section scripts{
@@ -31,12 +31,14 @@
         $('#tableDatas').on('change', function (e) {
             let index = e.target.selectedOptions.item(0).value;
             let data= preData[index];
+            
             $.ajax({
                 url: "/Home/Data",
                 type: "post",
                 data: {
                     tableName: data.tableName,
-                    fields: data.fields.map(field => field.name)
+                    fields: data.fields.map(field => field.fieldname),
+                    types:data.fields.map(field => field.type)
                 },
                 success: (res) => {
                     let data = JSON.parse(res).data;

@@ -76,38 +76,31 @@ namespace charts.Controllers
         {
             
             string result = "";
-
-            Dictionary<string, string> tableDic = new Dictionary<string, string>
-            {
-                { "草原", "grass" },
-                 { "天然草改良", "naturegrassbetter" },
-                { "草原执法", "pereport" },
-                { "人工草地病虫害", "pestdisease" },
-                { "鼠害", "pestmouse" },
-                { "虫害", "pestinsect" },
-                { "产草量", "prosperitysample" },
-                { "毒草害", "pestweeds" },
-                { "人工草地建设", "rgcdjs" }
-            };
-
             string tableName = collection.Get("tableName");
 
+            string types = collection.Get("types[]");
+            string fields = collection.Get("fields[]");
             
-            string numField = collection.Get("numField");
-            if (numField==null)
+            Dictionary<string,string> fieldDic=new  Dictionary<string, string>();
+
+            string[] typesArray= types.Split(',');
+            string[] fieldsArray= fields.Split(',');
+            
+            List<string> select =new List<string>();
+            List<string> textFields=new List<string>();
+            
+
+            for (int i = 0; i < fieldsArray.Length; i++)
             {
-                numField = collection.Get("numField[]");
-            }
-            string txtField = collection.Get("txtField");
-            string sql = "";
-            if (txtField!=null) {
-                sql = $"select {numField + "," + txtField} from {tableName} group by {txtField}";
-            }
-            else
-            {
-                sql = $"select {numField} from {tableName} group by {txtField}";
+                if(typesArray[i]=="n"){
+                    select.Add($"sum({fieldsArray[i]}) as { fieldsArray[i]}");
+                }else{
+                    select.Add(fieldsArray[i]);
+                    textFields.Add(fieldsArray[i]);
+                }
             }
 
+            string sql = $"select {string.Join(",",select.ToArray())} from {tableName} group by {string.Join(",",textFields)}";
             
             string dataString = "";
             try
@@ -116,68 +109,10 @@ namespace charts.Controllers
             }
             catch ( Exception e )
             {
-                dataString ="," +e.Message+",";
+                dataString ="'" +e.Message+"'";
             }
             result = $"{{\"message\":\"success\",\"data\":{dataString} }}";
             return result;
-        }
-        [HttpPost]
-        public string PreData(FormCollection collection)
-        {
-
-            string result = "";
-
-            string tableName = collection.Get("tableName");
-           
-            string fields = collection.Get("fields[]");
-
-            string[] fields_ = fields.Split(',');
-            List<string> textfield = new List<string>();
-            List<string> numfield = new List<string>();
-            foreach (string value in fields_)
-            {
-                if (!RowIsNumber(value)) {
-                    textfield.Add(value);
-                }
-                else
-                {
-                    numfield.Add("sum("+value+")");
-                }
-            }
-            string sql = "";
-            if (textfield.Count>0) {
-                sql = $"select {string.Join(",", textfield) + string.Join(",", numfield)} from {tableName} group by {string.Join(",", textfield)}";
-            }
-            else
-            {
-                sql = $"select { string.Join(",", numfield)} from {tableName} group by {string.Join(",", textfield)}";
-            }
-            
-            string dataString = "";
-            try
-            {
-                dataString = dbhelper.GetAsJson(CommandType.Text, sql);
-            }
-            catch (Exception e)
-            {
-                dataString = "," + e.Message + ",";
-            }
-            result = $"{{\"message\":\"success\",\"data\":{dataString} }}";
-
-            return result;
-        }
-
-        public bool RowIsNumber(string str)
-        {
-            bool flag = true;
-            try {
-                Convert.ToDecimal(str);
-            }
-            catch
-            {
-                flag = false;
-            }
-            return flag;
         }
     }
 }

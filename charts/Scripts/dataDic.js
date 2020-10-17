@@ -1209,7 +1209,7 @@ let preData = [
       {
         "name": "面积",
         "type": "n",
-        "fieldname": "mctypes"
+        "fieldname": "area"
       },
       {
         "name": "等级1",
@@ -1235,7 +1235,7 @@ let preData = [
       {
         "name": "面积",
         "type": "n",
-        "fieldname": "mctypes"
+        "fieldname": "area"
       },
       {
         "name": "等级1",
@@ -1261,7 +1261,7 @@ let preData = [
       {
         "name": "面积",
         "type": "n",
-        "fieldname": "mctypes"
+        "fieldname": "area"
       },
       {
         "name": "等级1",
@@ -1287,7 +1287,7 @@ let preData = [
       {
         "name": "面积",
         "type": "n",
-        "fieldname": "mctypes"
+        "fieldname": "area"
       },
       {
         "name": "等级1",
@@ -1335,8 +1335,7 @@ class barData {
   }
   init() {
     let data = this.baseJson;
-    let dataList = {};
-    return data.reduce(function (previousValue, row, index) {
+    let dataObj= data.reduce(function (previousValue, row, index) {
       for (const fieldName in row) {
         if (row.hasOwnProperty(fieldName)) {
           const value = row[fieldName];
@@ -1350,6 +1349,20 @@ class barData {
       return previousValue;
     }, {});
 
+    for (const fieldName in dataObj) {
+      if (dataObj.hasOwnProperty(fieldName)) {
+        const field = dataObj[fieldName];
+        if(fieldName!="year"){
+          if(dataDic[fieldName].type==="n"){
+            this.series.data=field;
+            this.series.name=dataDic[fieldName].name;
+          }else{
+            this.xAxis.name=dataDic[fieldName].name;
+            this.xAxis.data=field;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -1370,6 +1383,11 @@ $.fn.serializeObject = function () {
 };
 
 
+/**
+ * 
+ * @param {obj} json 要下载成josn文件的对象
+ * @param {string} filename 下载文件的名称
+ */
 function downloadJSON(json, filename = "downFile") {
   let blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
   let reader = new FileReader();
@@ -1387,6 +1405,11 @@ function downloadJSON(json, filename = "downFile") {
   });
   reader.readAsDataURL(blob);
 }
+
+/**
+ * 将json对象序列化
+ * @param {obj} json 要在html中展示的对象
+ */
 function formatJson(json) {
   return new Promise(function (ref) {
     let blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
@@ -1399,6 +1422,8 @@ function formatJson(json) {
     reader.readAsDataURL(blob);
   });
 }
+
+
 if (window) {
   window.barData = barData;
 }
