@@ -1,0 +1,16 @@
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\bin\Release\Aipuer.Common.dll
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\bin\Release\Aipuer.Common.pdb
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\bin\Release\ICSharpCode.SharpZipLib.dll
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\bin\Release\Newtonsoft.Json.dll
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\bin\Release\Npgsql.dll
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\bin\Release\NPOI.dll
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\bin\Release\NPOI.OOXML.dll
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\bin\Release\NPOI.OpenXml4Net.dll
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\bin\Release\NPOI.OpenXmlFormats.dll
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\bin\Release\System.Threading.Tasks.Extensions.dll
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\bin\Release\Newtonsoft.Json.xml
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\obj\Release\Aipuer.Common.csprojAssemblyReference.cache
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\obj\Release\Aipuer.Common.csproj.CoreCompileInputs.cache
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\obj\Release\Aipuer.Common.csproj.CopyComplete
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\obj\Release\Aipuer.Common.dll
+D:\Downloads\申淑欢\wdq_onemap(2)\Aipuer.Common\obj\Release\Aipuer.Common.pdb

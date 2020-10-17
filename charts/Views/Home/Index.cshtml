@@ -1,0 +1,157 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row" style="margin-top:50px;">
+    <div class="col-md-4">
+
+        <form method="post">
+            <div class="form-group">
+                <label for="tableName">数据名称：</label>
+                <select name="tableName" id="tableName" class="form-control" required>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="chartType">展示类型：</label>
+                <select name="chartType" class="form-control" id="chartType" list="chartTypes" required >
+                    <option value="条形图">条形图</option>
+                    <option value="折线图">折线图</option>
+                    <option value="饼状图">饼状图</option>
+                    <option value="环形图">环形图</option>
+                    <option value="表格">表格</option>
+                </select>
+            </div>
+            <div class="form-group" id="nameGroup">
+                <label for="chartName">图形名称:</label>
+                <input name="chartName" id="chartName" class="form-control" required>
+            </div> 
+            <div class="form-group">
+                <label>数字类型：</label>
+                <div id="integer">
+                    
+                </div>
+            </div>
+            <div class="form-group">
+                <label>文本类型：</label>
+                <div id="text">
+                    
+                </div>
+            </div>
+            <button type="submit" class="btn btn-default" formtarget="_blank" >确定</button>
+            <button type="button" onclick="downloadJSON(result,'样例数据')" class="btn btn-default" >下载</button>
+        </form>
+    </div>
+    <div class="col-md-8">
+        
+            <p id="result" class="bg-info"></p>
+        
+        <div id="main" style="width: 100%;height:400px;"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/echarts.js"></script>
+    <script src="~/Scripts/dataDic.js"></script>
+    <script>
+    // 基于准备好的dom，初始化echarts实例
+        //var myChart = echarts.init(document.getElementById('main'));
+        //let bar=new barData(myChart);
+       // bar.drawChart();
+       let nameGroup=$("<div class="form-group" id="nameGroup"><label for="chartName">图形名称:</label><input name="chartName" id="chartName" class="form-control" required></div> ");
+       
+
+        $('#tableName').on('change', function (e) {
+            let value = this.value;
+            let tableName=e.target.value;
+            if(!tableName){
+                return;
+            }
+            var fields = tableModules[tableName].fields;
+
+            $('#integer').empty();
+            $('#text').empty();
+            fields.forEach(function (fieldName, index) {
+                if (dataDic[fieldName]) {
+                    if (dataDic[fieldName].type === 'n') {
+                        let html = '<div class="checkbox inline_block" onclick="removeReq()"><label><input type="checkbox" name="numField" value="'+fieldName+'" >' + dataDic[fieldName].name + '</label></div >';
+                        $('#integer').append(html);
+                    } else {
+                        let html = '<div class="checkbox inline_block"><label ><input type="checkbox" name="txtField" id="optionsRadios3" value="'+ fieldName+'" >' + dataDic[fieldName].name +'</label></div >';
+                        $('#text').append(html);
+                    }
+                }
+            });
+            $(':checkbox').click(function(){
+                let txtLen= $('[name=txtField]:checked').length;
+                let numLen= $('[name=numField]:checked').length;
+                if(txtLen>1|numLen>1){
+
+                }
+            })
+        })
+        //初始化table选择输入框
+        $('#tableName').append('<option></option>');
+        for (let table in tableModules) {
+            $('#tableName').append('<option value="' + table+ '">'+ tableModules[table].name+'</option>');
+        }
+
+        function removeReq(){
+            $('.checkbox label input').removeAttr('required');
+        }
+        let result=[];
+        $('form').submit(function(){
+            let datas=$('form').serializeObject();
+            chartData={
+                chartName:"",
+                tableName:"",
+                fields:[]
+            };
+            //console.log(datas);
+            if(datas.chartName===""|datas.chartName===null){
+                let txtField=dataDic[datas.txtField];
+                let numField=dataDic[datas.numField];
+
+                chartData.chartName=$('#tableName')[0].selectedOptions.item(0).innerText+txtField.name+"-"+numField.name+"统计图";
+            }
+            else{
+                chartData.chartName=datas.chartName;
+            }
+            
+            chartData.tableName=datas.tableName;
+            chartData.chartType=["","",""];
+            if(typeof(datas.numField) != 'string'){
+                datas.numField.forEach(function(numField){
+                     chartData.fields.push({name:numField,type:'n'});
+                })
+                if(datas.txtField){
+                    chartData.fields.push({name:datas.txtField,type:'t'});
+                }
+            }else{
+                chartData.fields.push({name:dataDic[datas.numField].name,fieldName:datas.numField,type:'n'});
+                chartData.fields.push({name:dataDic[datas.txtField].name,fieldName:datas.txtField,type:'t'});
+                chartData.fields.push({name:"年份",type:'t',fieldName:"year"});
+            }
+
+            result.push({rowData:datas,data:chartData});
+            
+            formatJson(result.map(data => data.data)).then((string) => {
+                $('#result').html(string);
+            });
+            
+
+            //$.ajax({
+            //    url:"/Home/Data",
+            //    type:"post",
+            //    data:datas,
+            //    success:(res)=>{
+            //        console.log(JSON.parse(res).data);
+            //         //let bar=new barData(myChart,JSON.parse(res));
+            //        //bar.drawChart(); 
+            //    }
+            //});
+            return false;
+        });
+
+        
+    </script>
+    }

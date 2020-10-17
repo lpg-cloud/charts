@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.902
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "charts", "charts\charts.csproj", "{59E093D8-272B-4C87-9805-FCD0109C441F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aipuer.Common", "Aipuer.Common\Aipuer.Common.csproj", "{7DEBFD64-D8DD-489B-B483-C26B6593723B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{59E093D8-272B-4C87-9805-FCD0109C441F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59E093D8-272B-4C87-9805-FCD0109C441F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59E093D8-272B-4C87-9805-FCD0109C441F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59E093D8-272B-4C87-9805-FCD0109C441F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DEBFD64-D8DD-489B-B483-C26B6593723B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DEBFD64-D8DD-489B-B483-C26B6593723B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DEBFD64-D8DD-489B-B483-C26B6593723B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DEBFD64-D8DD-489B-B483-C26B6593723B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E453E043-FA69-47FC-A7E1-CDAFAA935CE5}
+	EndGlobalSection
+EndGlobal

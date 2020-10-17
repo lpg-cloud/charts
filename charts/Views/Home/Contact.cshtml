@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Contact";
+}
+
+
+<div class="row" style="margin-top:50px;">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="tableDatas">预设图表</label>
+                <select id="tableDatas" class="form-control"></select>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div id="chartContent" width="100%"></div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/dataDic.js"></script>
+    <script src="~/Scripts/echarts.js"></script>
+    <script>
+        preData.forEach(function (table, index) {
+            $('#tableDatas').append('<option value="' + index + '">' + table.chartName + '</option>');
+        });
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('chartContent'));
+        $('#tableDatas').on('change', function (e) {
+            let index = e.target.selectedOptions.item(0).value;
+            let data= preData[index];
+            $.ajax({
+                url: "/Home/Data",
+                type: "post",
+                data: {
+                    tableName: data.tableName,
+                    fields: data.fields.map(field => field.name)
+                },
+                success: (res) => {
+                    let data = JSON.parse(res).data;
+                    let bar = new barData(myChart, data);
+                    console.log(bar.init());
+                    bar.drawChart(); 
+                }
+            });
+        })
+
+        
+
+    </script>
+}
