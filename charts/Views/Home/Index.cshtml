@@ -4,6 +4,11 @@
 
 <div class="row" style="margin-top:50px;">
     <div class="col-md-4">
+        <div class="form-group">
+            <label>从文件中加载:</label>
+            <input type="file"/>
+        </div>
+        <button type="button" onclick="downloadJSON(result,'样例数据')" class="btn btn-default"  >下载</button>
 
         <form method="post">
             <div class="form-group">
@@ -24,10 +29,6 @@
             <div id="chartName">
 
             </div>
-            @* <div class="form-group" id="nameGroup">
-                <label for="chartName">图形名称:</label>
-                <input name="chartName" id="chartName" class="form-control" required>
-            </div>  *@
             <div class="form-group">
                 <label>数字类型：</label>
                 <div id="integer">
@@ -40,25 +41,42 @@
                     
                 </div>
             </div>
-            <button type="submit" class="btn btn-default" formtarget="_blank" >确定</button>
-            <button type="button" onclick="downloadJSON(result,'样例数据')" class="btn btn-default" >下载</button>
+            <button type="submit" class="btn btn-default" formtarget="_blank" >添加</button>
         </form>
     </div>
     <div class="col-md-4 bg-info" style="height: 550px;overflow: auto;">
         <label>当前数据:</label>
         <p id="currentRes"></p>
     </div>
-    <div class="col-md-4 bg-success" style="height: 550px;overflow: auto;">
+    <div class="col-md-4 bg-success" style="height: 550px;overflow: auto; position:relative">
         <label>总数据:</label>
-        <p id="result"></p>
+        <p id="result" style="min-height: 500px;"></p>
+        
     </div>
 </div>
 
 @section Scripts {
     <script src="~/Scripts/dataDic.js"></script>
     <script>
+        //定义一个全局的列表变量存储生成的json
+        let result=[];
+
        let nameGroup=$('<div class="form-group" id="nameGroup"><label for="chartName">图形名称:</label><input name="chartName" id="chartName" class="form-control" required></div> ');
-       
+       let file=document.querySelector('[type=file]');
+       file.onchange=function(){
+           let reader=new FileReader();
+           reader.onload=function(e){
+               let resultText=reader.result;
+               result=JSON.parse(resultText);
+
+                formatJson(result).then((string) => {
+                    $('#result').html(string);
+                });
+           }
+           reader.readAsText(file.files[0]);
+       }
+
+
 
         $('#tableName').on('change', function (e) {
             let value = this.value;
@@ -100,7 +118,7 @@
         function removeReq(){
             $('.checkbox label input').removeAttr('required');
         }
-        let result=[];
+        
         $('form').submit(function(){
             let datas=$('form').serializeObject();
             chartData={
@@ -108,8 +126,7 @@
                 tableName:"",
                 fields:[]
             };
-            //console.log(datas);
-            if(datas.chartName===""|datas.chartName===null){
+            if(datas.chartName===""|datas.chartName===null|datas.chartName===undefined){
                 let txtField=dataDic[datas.txtField];
                 let numField=dataDic[datas.numField];
 
@@ -128,7 +145,7 @@
             }catch{
                 if(datas.numField){
                     datas.numField.forEach(function(numField){
-                        chartData.fields.push({name:dataDic[datas.numField].name,fieldName:numField,type:'n'});
+                        chartData.fields.push({name:dataDic[numField].name,fieldName:numField,type:'n'});
                     })
                 }
             }
@@ -139,22 +156,29 @@
             }catch{
                 if(datas.txtField){
                     datas.txtField.forEach(function(txtField){
-                        chartData.fields.push({name:dataDic[datas.txtField].name,fieldName:txtField,type:'t'});
+                        chartData.fields.push({name:dataDic[txtField].name,fieldName:txtField,type:'t'});
                     })
                 }
             }
             
-            chartData.fields.push({name:"年份",type:'t',fieldName:"year"}); 
-            result.push({rowData:datas,data:chartData});
-            formatJson(chartData).then(str=>$('#currentRes').html(str));
+            //chartData.fields.push({name:"年份",type:'t',fieldName:"year"}); 
+            if(!isObjInList(chartData,result)){
+                //result.push({rowData:datas,data:chartData});
+                result.push(chartData);
+                //将当前选择的数据放到右边框中
+                formatJson(chartData).then(str=>$('#currentRes').html(str));
+                //将总数据重新显示
+                formatJson(result).then((string) => {
+                    $('#result').html(string);
+                    //将总数据的框拉到底
+                    $('#result').parent().scrollTop($('#result').height());
+                });
+            }else{
+                alert('已经存在了!!!');
+            }
             
-            formatJson(result.map(data => data.data)).then((string) => {
-                $('#result').html(string);
-            });
-            
+           
             return false;
         });
-
-        
     </script>
     }

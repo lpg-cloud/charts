@@ -1330,7 +1330,7 @@ class barData {
     this.init();
   }
   drawChart() {
-    console.log();
+    console.log(this);
     this.chart.setOption(this);
   }
   init() {
@@ -1354,8 +1354,9 @@ class barData {
         const field = dataObj[fieldName];
         if(fieldName!="year"){
           if(dataDic[fieldName].type==="n"){
-            this.series.data=field;
-            this.series.name=dataDic[fieldName].name;
+            this.series[0].data=field;
+            this.series[0].name=dataDic[fieldName].name;
+            this.legend.data[0]=dataDic[fieldName].name;
           }else{
             this.xAxis.name=dataDic[fieldName].name;
             this.xAxis.data=field;
@@ -1422,7 +1423,74 @@ function formatJson(json) {
     reader.readAsDataURL(blob);
   });
 }
+/**
+ * 查询列表list总是否存在与对象ob键值对完全相同的对象
+ * @param {obj} ob 要查询的对象
+ * @param {Array} list 要查询的列表
+ */
+function isObjInList(ob,list){
+  for(let obj of list){
+    if(obj.equals(ob)){
+      return true;
+    }
+  }
+  return false;
+}
 
+//给对象添加一个比较的函数
+Object.prototype.equals = function(object2) {
+  //For the first loop, we only check for types
+  for (propName in this) {
+      //Check for inherited methods and properties - like .equals itself
+      //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty
+      //Return false if the return value is different
+      if (this.hasOwnProperty(propName) != object2.hasOwnProperty(propName)) {
+          return false;
+      }
+      //Check instance type
+      else if (typeof this[propName] != typeof object2[propName]) {
+          //Different types => not equal
+          return false;
+      }
+  }
+  //Now a deeper check using other objects property names
+  for(propName in object2) {
+      //We must check instances anyway, there may be a property that only exists in object2
+          //I wonder, if remembering the checked values from the first loop would be faster or not 
+      if (this.hasOwnProperty(propName) != object2.hasOwnProperty(propName)) {
+          return false;
+      }
+      else if (typeof this[propName] != typeof object2[propName]) {
+          return false;
+      }
+      //If the property is inherited, do not check any more (it must be equa if both objects inherit it)
+      if(!this.hasOwnProperty(propName))
+        continue;
+
+      //Now the detail check and recursion
+
+      //This returns the script back to the array comparing
+      /**REQUIRES Array.equals**/
+      if (this[propName] instanceof Array && object2[propName] instanceof Array) {
+                 // recurse into the nested arrays
+         if (!this[propName].equals(object2[propName]))
+                      return false;
+      }
+      else if (this[propName] instanceof Object && object2[propName] instanceof Object) {
+                 // recurse into another objects
+                 //console.log("Recursing to compare ", this[propName],"with",object2[propName], " both named \""+propName+"\"");
+         if (!this[propName].equals(object2[propName]))
+                      return false;
+      }
+      //Normal value comparison for strings and numbers
+      else if(this[propName] != object2[propName]) {
+         return false;
+      }
+  }
+  //If everything passed, let's say YES
+  return true;
+}
+Object.defineProperty(Object.prototype, "equals", {enumerable: false});
 
 if (window) {
   window.barData = barData;

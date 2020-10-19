@@ -92,11 +92,17 @@ namespace charts.Controllers
 
             for (int i = 0; i < fieldsArray.Length; i++)
             {
-                if(typesArray[i]=="n"){
-                    select.Add($"sum({fieldsArray[i]}) as { fieldsArray[i]}");
-                }else{
-                    select.Add(fieldsArray[i]);
-                    textFields.Add(fieldsArray[i]);
+                if (fieldsArray[i]!="year")
+                {
+                    if (typesArray[i] == "n")
+                    {
+                        select.Add($"sum({fieldsArray[i]}::float) as { fieldsArray[i]}");
+                    }
+                    else
+                    {
+                        select.Add(fieldsArray[i]);
+                        textFields.Add(fieldsArray[i]);
+                    }
                 }
             }
 
