@@ -3,81 +3,75 @@
 }
 
 <div class="row" style="margin-top:50px;">
-    <div class="col-md-4">
-        <div class="form-group">
-            <label>从文件中加载:</label>
-            <input type="file"/>
-        </div>
-        <div>
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#add" aria-controls="add" role="tab" data-toggle="tab">添加</a></li>
-                <li role="presentation"><a href="#remove" aria-controls="remove" role="tab" data-toggle="tab">移除</a></li>
-                <li><a>&#09;</a></li>
-                <li><a>&#09;</a></li>
-                <li role="presentation"><a class="bg-primary" type="button" onclick="downloadJSON(result,'样例数据')" >导出</a></li>
-            </ul>
+    <div class="form-group">
+        <label>从文件中加载:</label>
+        <input type="file" />
+    </div>
+    <div class="col-md-8">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#add" aria-controls="add" role="tab" data-toggle="tab">添加</a></li>
+            <li role="presentation"><a href="#remove" aria-controls="remove" role="tab" data-toggle="tab">移除</a></li>
+        </ul>
 
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="add">
-                    <div style="margin-top: 10px;">
-                        <form method="post">
-                            <div class="form-group">
-                                <label for="tableName">数据名称：</label>
-                                <select name="tableName" id="tableName" class="form-control" required>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="chartType">展示类型：</label>
-                                <select name="chartType" class="form-control" id="chartType" list="chartTypes" required >
-                                    <option value="条形图">条形图</option>
-                                    <option value="折线图">折线图</option>
-                                    <option value="饼状图">饼状图</option>
-                                    <option value="环形图">环形图</option>
-                                    <option value="表格">表格</option>
-                                </select>
-                            </div>
-                            <div id="chartName">
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="add">
+                <div style="margin-top: 10px;">
+                    <form method="post" class="col-md-6">
+                        <div class="form-group">
+                            <label for="tableName">数据名称：</label>
+                            <select name="tableName" id="tableName" class="form-control" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="chartType">展示类型：</label>
+                            <select name="chartType" class="form-control" id="chartType" list="chartTypes" required>
+                                <option value="条形图">条形图</option>
+                                <option value="折线图">折线图</option>
+                                <option value="饼状图">饼状图</option>
+                                <option value="环形图">环形图</option>
+                                <option value="表格">表格</option>
+                            </select>
+                        </div>
+                        <div id="chartName">
 
-                            </div>
-                            <div class="form-group">
-                                <label>数字类型：</label>
-                                <div id="integer"></div>
-                            </div>
-                            <div class="form-group">
-                                <label>文本类型：</label>
-                                <div id="text"></div>
-                            </div>
-                            <button type="submit" class="btn btn-default" formtarget="_blank" >添加</button>
-                        </form>
+                        </div>
+                        <div class="form-group">
+                            <label>数字类型：</label>
+                            <div id="integer"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>文本类型：</label>
+                            <div id="text"></div>
+                        </div>
+                        <button type="submit" class="btn btn-default" formtarget="_blank">添加</button>
+                    </form>
+                    <div class="col-md-6 bg-success" style="height: 550px;overflow: auto; position:relative">
+                        <label>总数据:</label>
+                        <p id="result" style="min-height: 500px;"></p>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="remove">
-                    <div style="margin-top: 10px;">
-                        <form>
-                            <div class="form-group">
-                                <label for="tableDatas">已添加</label>
-                                <select id="tableDatas" class="form-control"></select>
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-default" onclick="removeItem()" >移除</button>
-                            </div>
-                        </form>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="remove">
+                <div style="margin-top: 10px;">
+                    <form class="col-md-6">
+                        <div class="form-group">
+                            <label for="tableDatas">已添加</label>
+                            <select id="tableDatas" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" onclick="removeItem()">移除</button>
+                        </div>
+                    </form>
+                    <div class="col-md-6 bg-info" style="height: 550px;overflow: auto;">
+                        <label>当前数据:</label>
+                        <p id="currentRes"></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    @* <div class="col-md-4 bg-info" style="height: 550px;overflow: auto;">
-        <label>当前数据:</label>
-        <p id="currentRes"></p>
-    </div>
-    <div class="col-md-4 bg-success" style="height: 550px;overflow: auto; position:relative">
-        <label>总数据:</label>
-        <p id="result" style="min-height: 500px;"></p>
-        
-    </div> *@
+    <button class="btn btn-default" onclick="exportToJson(result)">导出</button>
 </div>
 
 @section Scripts {
@@ -92,7 +86,17 @@
             let reader=new FileReader();
             reader.onload=function(e){
                 let resultText=reader.result;
-                result=JSON.parse(resultText);
+
+                resultObj=JSON.parse(resultText);
+                for(let chartName in resultObj){
+                    let currentChart=resultObj[chartName];
+                    currentChart['chartName']=chartName;
+                    currentChart.fields.forEach(function(field){
+                        delete field.xyType;
+                    });
+                    result.push(currentChart);
+                }
+                //result=JSON.parse(resultText);
 
                 formatJson(result).then((string) => {
                     $('#result').html(string);
@@ -204,8 +208,10 @@
                     //将总数据的框拉到底
                     $('#result').parent().scrollTop($('#result').height());
                 });
+
             }else{
                 alert('已经存在了!!!');
+                //$('.alert-danger').removeClass('hide').addClass('in');
             }
             reflashSelect();
             return false;
@@ -247,5 +253,22 @@
             formatJson(data).then(str=>$('#currentRes').html(str));
             
         });
+
+        function exportToJson(raw) {
+            let result = raw.reduce(function (preValue, chart, index) {
+                
+                preValue[chart.chartName] = chart;
+                delete chart.chartName;
+                chart.fields.forEach(function (field) {
+                    if (field.type === 't' | field.name==='年份') {
+                        field['xyType'] = 'x';
+                    } else {
+                        field['xyType'] = 'y';
+                    }
+                });
+                return preValue;
+            }, {});
+            downloadJSON(result, '样例数据');
+        }
     </script>
     }

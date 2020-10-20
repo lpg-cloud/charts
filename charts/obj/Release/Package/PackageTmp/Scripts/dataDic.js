@@ -25,7 +25,11 @@
   },
   "date": {
     "name": "年份",
-    "type": "n"
+    "type": "t"
+    },
+  "year": {
+      "name": "年份",
+      "type":'t'
   },
   "mctypes": {
     "name": "牧草类型",
