@@ -230,8 +230,8 @@ E:\net_MVC\charts\Aipuer.Common\bin\Debug\Aipuer.Common.dll
 E:\net_MVC\charts\Aipuer.Common\bin\Debug\Aipuer.Common.pdb
 E:\net_MVC\charts\Aipuer.Common\bin\Debug\Newtonsoft.Json.dll
 E:\net_MVC\charts\Aipuer.Common\bin\Debug\Newtonsoft.Json.xml
-E:\net_MVC\charts\Aipuer.Common\obj\Debug\Aipuer.Common.csprojAssemblyReference.cache
 E:\net_MVC\charts\Aipuer.Common\obj\Debug\Aipuer.Common.csproj.CoreCompileInputs.cache
 E:\net_MVC\charts\Aipuer.Common\obj\Debug\Aipuer.Common.csproj.CopyComplete
 E:\net_MVC\charts\Aipuer.Common\obj\Debug\Aipuer.Common.dll
 E:\net_MVC\charts\Aipuer.Common\obj\Debug\Aipuer.Common.pdb
+E:\net_MVC\charts\Aipuer.Common\obj\Debug\Aipuer.Common.csprojAssemblyReference.cache

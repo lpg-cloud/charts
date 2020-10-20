@@ -15,7 +15,7 @@ namespace Aipuer.Common
     public class PostgreHelper : IDBHelper
     {
         private string connectionString;
-        private string connString = System.Configuration.ConfigurationManager.ConnectionStrings["PgDBConnection"].ToString();
+        private string connString = System.Configuration.ConfigurationManager.ConnectionStrings["PgDBConnection_lpg"].ToString();
 
         public PostgreHelper()
         {

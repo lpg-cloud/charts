@@ -71,6 +71,7 @@ namespace charts.Controllers
 
             return result;
         }
+
         [HttpPost]
         public string Data(FormCollection collection)
         {

@@ -11,20 +11,8 @@
     "name": "等级",
     "type": "t"
   },
-  "dengji": {
-    "name": "等级1",
-    "type": "t"
-  },
-  "yalei": {
-    "name": "亚类",
-    "type": "t"
-  },
   "sanhua": {
     "name": "三化",
-    "type": "t"
-  },
-  "xing": {
-    "name": "植物类型",
     "type": "t"
   },
   "lei": {
@@ -32,35 +20,27 @@
     "type": "t"
   },
   "ssjg": {
-    "name": "ssjg",
+    "name": "所属机构",
     "type": ""
   },
   "date": {
     "name": "年份",
-    "type": "n"
+    "type": "t"
+    },
+  "year": {
+      "name": "年份",
+      "type":'t'
   },
   "mctypes": {
     "name": "牧草类型",
-    "type": "t"
-  },
-  "mczhonglei": {
-    "name": "牧草种类",
     "type": "t"
   },
   "zzarea": {
     "name": "种植面积",
     "type": "n"
   },
-  "jxpoint": {
-    "name": "jx点",
-    "type": ""
-  },
   "country": {
-    "name": "区名",
-    "type": "t"
-  },
-  "towns": {
-    "name": "镇名",
+    "name": "县名",
     "type": "t"
   },
   "improvearea": {
@@ -76,7 +56,7 @@
     "type": "t"
   },
   "specie": {
-    "name": "物种",
+    "name": "牧草类型",
     "type": "t"
   },
   "danger": {
@@ -195,10 +175,7 @@
     "name": "名称",
     "type": "t"
   },
-  "telephone": {
-    "name": "联系电话",
-    "type": "t"
-  },
+  
   "address": {
     "name": "地址",
     "type": "t"
